@@ -1,0 +1,12 @@
+<fieldset :disabled="disabled">
+    <legend>{{text}}</legend>
+    <Dropdown v-model="conditionType" :options="conditions" />
+    <input v-if="isSingularValueCondition" type="number" v-model="singularValue">
+    <div v-else>
+        <Dropdown v-model="lowerBoundConditionType" :options="lowerBoundConditions" />
+        <input type="number" v-model="lowerBoundValue">
+        &&
+        <Dropdown v-model="upperBoundConditionType" :options="upperBoundConditions" />
+        <input type="number" v-model="upperBoundValue">
+    </div>
+</fieldset>

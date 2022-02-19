@@ -1,0 +1,220 @@
+<div id="character-index">
+    <header>
+        <ItemTooltip ref="itemTooltipRef" v-show="itemTooltip.hovering" :style="{ left: itemTooltip.x, top: itemTooltip.y }" :id="itemTooltip.id" />
+        <div class="sort">
+            <Dropdown v-model="sortColumn" :options="sortColumns" />
+            <Dropdown v-model="sortDirection" :options="sortDirectionOptions" />
+        </div>
+        <div class="filter">
+            <FilterContainer v-model="filters.name.active">
+                <TextCondition text="Name" v-model="filters.name.value" :disabled="!filters.name.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.sex.active">
+                <fieldset :disabled="!filters.sex.active">
+                    <legend>Sex</legend>
+                    <Dropdown v-model="filters.sex.value" :options="sexOptions" />
+                </fieldset>
+            </FilterContainer>
+            <FilterContainer v-model="filters.type.active">
+                <fieldset :disabled="!filters.type.active">
+                    <legend>Type</legend>
+                    <label v-for="(option, index) in typeOptions" :key="index">
+                        {{option.text}}
+                        <Checkbox :modelValue="filters.type.value.includes(option.value)" @update:modelValue="onTypeChecked(filters.type.value, option.value)" />
+                    </label>
+                </fieldset>
+            </FilterContainer>
+            <FilterContainer v-model="filters.level.active">
+                <NumericCondition text="Level" :value="filters.level.value" :disabled="!filters.level.active" />
+            </FilterContainer>
+
+            <FilterContainer v-model="filters.strength.active">
+                <NumericCondition text="Strength" :value="filters.strength.value" :disabled="!filters.strength.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.agility.active">
+                <NumericCondition text="Agility" :value="filters.agility.value" :disabled="!filters.agility.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.intelligence.active">
+                <NumericCondition text="Intelligence" :value="filters.intelligence.value" :disabled="!filters.intelligence.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.charisma.active">
+                <NumericCondition text="Charisma" :value="filters.charisma.value" :disabled="!filters.charisma.active" />
+            </FilterContainer>
+
+            <FilterContainer v-model="filters.ironflesh.active">
+                <NumericCondition text="Ironflesh" :value="filters.ironflesh.value" :disabled="!filters.ironflesh.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.powerStrike.active">
+                <NumericCondition text="Power Strike" :value="filters.powerStrike.value" :disabled="!filters.powerStrike.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.powerThrow.active">
+                <NumericCondition text="Power Throw" :value="filters.powerThrow.value" :disabled="!filters.powerThrow.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.powerDraw.active">
+                <NumericCondition text="Power Draw" :value="filters.powerDraw.value" :disabled="!filters.powerDraw.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.weaponMaster.active">
+                <NumericCondition text="Weapon Master" :value="filters.weaponMaster.value" :disabled="!filters.weaponMaster.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.shield.active">
+                <NumericCondition text="Shield" :value="filters.shield.value" :disabled="!filters.shield.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.athletics.active">
+                <NumericCondition text="Athletics" :value="filters.athletics.value" :disabled="!filters.athletics.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.riding.active">
+                <NumericCondition text="Riding" :value="filters.riding.value" :disabled="!filters.riding.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.horseArchery.active">
+                <NumericCondition text="Horse Archery" :value="filters.horseArchery.value" :disabled="!filters.horseArchery.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.looting.active">
+                <NumericCondition text="Looting" :value="filters.looting.value" :disabled="!filters.looting.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.trainer.active">
+                <NumericCondition text="Trainer" :value="filters.trainer.value" :disabled="!filters.trainer.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.tracking.active">
+                <NumericCondition text="Tracking" :value="filters.tracking.value" :disabled="!filters.tracking.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.tactics.active">
+                <NumericCondition text="Tactics" :value="filters.tactics.value" :disabled="!filters.tactics.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.pathfinding.active">
+                <NumericCondition text="Path-finding" :value="filters.pathfinding.value" :disabled="!filters.pathfinding.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.spotting.active">
+                <NumericCondition text="Spotting" :value="filters.spotting.value" :disabled="!filters.spotting.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.inventoryManagement.active">
+                <NumericCondition text="Inventory Management" :value="filters.inventoryManagement.value" :disabled="!filters.inventoryManagement.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.woundTreatment.active">
+                <NumericCondition text="Wound Treatment" :value="filters.woundTreatment.value" :disabled="!filters.woundTreatment.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.surgery.active">
+                <NumericCondition text="Surgery" :value="filters.surgery.value" :disabled="!filters.surgery.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.firstAid.active">
+                <NumericCondition text="First Aid" :value="filters.firstAid.value" :disabled="!filters.firstAid.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.engineer.active">
+                <NumericCondition text="Engineer" :value="filters.engineer.value" :disabled="!filters.engineer.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.persuasion.active">
+                <NumericCondition text="Persuasion" :value="filters.persuasion.value" :disabled="!filters.persuasion.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.prisonerManagement.active">
+                <NumericCondition text="Prisoner Management" :value="filters.prisonerManagement.value" :disabled="!filters.prisonerManagement.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.leadership.active">
+                <NumericCondition text="Leadership" :value="filters.leadership.value" :disabled="!filters.leadership.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.trade.active">
+                <NumericCondition text="Trade" :value="filters.trade.value" :disabled="!filters.trade.active" />
+            </FilterContainer>
+
+            <FilterContainer v-model="filters.oneHanded.active">
+                <NumericCondition text="OneHanded" :value="filters.oneHanded.value" :disabled="!filters.oneHanded.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.twoHanded.active">
+                <NumericCondition text="TwoHanded" :value="filters.twoHanded.value" :disabled="!filters.twoHanded.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.polearms.active">
+                <NumericCondition text="Polearms" :value="filters.polearms.value" :disabled="!filters.polearms.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.archery.active">
+                <NumericCondition text="Archery" :value="filters.archery.value" :disabled="!filters.archery.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.crossbow.active">
+                <NumericCondition text="Crossbow" :value="filters.crossbow.value" :disabled="!filters.crossbow.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.throwing.active">
+                <NumericCondition text="Throwing" :value="filters.throwing.value" :disabled="!filters.throwing.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.firearms.active">
+                <NumericCondition text="Firearms" :value="filters.firearms.value" :disabled="!filters.firearms.active" />
+            </FilterContainer>
+
+            <FilterContainer v-model="filters.otherFlags.active">
+                <fieldset :disabled="!filters.otherFlags.active">
+                    <legend>Flags</legend>
+                    <button @click="flagFilterModalState = true">Setting</button>
+                </fieldset>
+                <Modal v-model="flagFilterModalState">
+                    <template #header>Flags</template>
+                    <template #body>
+                        <div class="modal-body flags">
+                            <CheckboxArray v-model="filters.otherFlags.value" :options="flagOptions" :threeState="true" />
+                        </div>
+                    </template>
+                </Modal>
+            </FilterContainer>
+            <FilterContainer v-model="filters.upgrades.active">
+                <BooleanCondition text="Upgrades" v-model="filters.upgrades.value" :disabled="!filters.upgrades.active" :three-state="true" />
+            </FilterContainer>
+        </div>
+    </header>
+    <section>
+        <Table :columns="columns" :rows="rows">
+            <template #cell(rowNo)="{ index }">
+                {{ index + 1 }}
+            </template>
+            <template #cell(i)="{ data }">
+                {{ data.i }}
+            </template>
+            <template #cell(id)="{ data }">
+                {{ data.id }}
+            </template>
+            <template #cell(name)="{ data }">
+                {{ data.name === data.pluralizedName ? data.name : `${data.name} (${data.pluralizedName})` }}
+            </template>
+            <template #cell(type)="{ data }">
+                {{ data.type }}
+            </template>
+            <template #cell(factionID)="{ data }">
+                {{ data.factionID }}
+            </template>
+            <template #cell(level)="{ data }">
+                {{ data.level }}
+            </template>
+            <template #cell(attributes)="{ data }">
+                <ul>
+                    <li v-for="(attribute, index) in data.attributes" :key="index">{{attribute.text}} {{attribute.value}}</li>
+                </ul>
+            </template>
+            <template #cell(skills)="{ data }">
+                <ul>
+                    <li v-for="(skill, index) in data.skills" :key="index">{{skill.text}} {{skill.value}}</li>
+                </ul>
+            </template>
+            <template #cell(weaponProficiencies)="{ data }">
+                <ul>
+                    <li v-for="(proficiency, index) in data.weaponProficiencies" :key="index">{{proficiency.text}} {{proficiency.value}}</li>
+                </ul>
+            </template>
+            <template #cell(otherFlags)="{ data }">
+                <ul>
+                    <li v-if="data.otherFlags.length > 0" v-for="(flag, index) in data.otherFlags" :key="index">{{flag}}</li>
+                    <li v-else>none</li>
+                </ul>
+            </template>
+            <template #cell(inventory)="{ data, index }">
+                <ul class="inventory">
+                    <li v-if="data.inventory.length > 0" v-for="(item, index2) in data.inventory" :key="index2" class="item" :index="index" :index2="index2" @mouseover="onTooltipShow(index, index2)" @mouseleave="onTooltipHide(index, index2)">{{item.name}}</li>
+                    <li v-else>none</li>
+                </ul>
+            </template>
+            <template #cell(upgrades)="{ data }">
+                <ul>
+                    <li v-if="data.upgrades.length > 0" v-for="(upgrade, index) in data.upgrades" :key="index">{{upgrade.name}}</li>
+                    <li v-else>none</li>
+                </ul>
+            </template>
+            <template #cell(tools)="{ index }">
+                <button @click="selectTroop(index)">View</button>
+                <button @click="selectTroopEdit(index)">Edit</button>
+            </template>
+        </Table>
+    </section>
+</div>

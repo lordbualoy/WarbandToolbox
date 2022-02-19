@@ -1,0 +1,50 @@
+<div v-if="id" class="tooltip">
+    <section>{{name}}</section>
+    <section class="type">{{typeName}}</section>
+    <section v-show="difficulty" class="difficulty">{{difficulty}}</section>
+    <section class="value">Value: {{value}}</section>
+    <section>Weight: {{weight}}</section>
+    <template v-if="isWeapon" v-for="(weaponDetail, index) in weaponDetails" :key="`w${index}`">
+        <section v-show="hasAlternateMode" class="type">{{weaponDetail.typeName}}</section>
+        <template v-if="weaponDetail.isMelee">
+            <section v-show="weaponDetail.swing" class="damage">Swing: {{weaponDetail.swing}}</section>
+            <section v-show="weaponDetail.thrust" class="damage">Thrust: {{weaponDetail.thrust}}</section>
+        </template>
+        <template v-if="weaponDetail.isRanged">
+            <section class="damage">Damage: {{weaponDetail.thrust}}</section>
+            <section>Ammo: {{weaponDetail.maxAmmo}}</section>
+            <section class="accuracy">Accuracy: {{weaponDetail.accuracy}}</section>
+        </template>
+        <section>Speed rating: {{weaponDetail.speedRating}}</section>
+        <section v-if="weaponDetail.isMelee">Weapon reach: {{weaponDetail.weaponLength}}</section>
+        <section v-else-if="weaponDetail.isRanged">Missile speed: {{weaponDetail.missileSpeed}}</section>
+        <section v-for="(flag, index2) in weaponDetail.flags" :key="index2" :class="{ goodFlag: flag.flagType === 'good', badFlag: flag.flagType === 'bad' }">{{flag.text}}</section>
+    </template>
+    <template v-else-if="isAmmo">
+        <section class="damage">Damage: {{ammoDetail.damage}}</section>
+        <section>Ammo: {{ammoDetail.maxAmmo}}</section>
+    </template>
+    <template v-else-if="isShield">
+        <section>Hit Points: {{shieldDetail.hitPoints}}</section>
+        <section class="armor">Resistance: {{shieldDetail.armor}}</section>
+        <section>Size: {{shieldDetail.size}}</section>
+        <section>Speed rating: {{shieldDetail.speedRating}}</section>
+    </template>
+    <section
+        v-else-if="isArmor"
+        v-for="(part, index) in armorDetail"
+        :key="`a${index}`"
+        class="armor"
+    >
+        {{part.text}}: {{part.value}}
+    </section>
+    <template v-else-if="isMount">
+        <section class="armor">Armor: {{mountDetail.armor}}</section>
+        <section>Speed rating: {{mountDetail.speedRating}}</section>
+        <section>Maneuver: {{mountDetail.maneuver}}</section>
+        <section class="damage">Charge: {{mountDetail.charge}}</section>
+        <section>Hit Points: {{mountDetail.hitPoints}}</section>
+        <section>Scale: {{mountDetail.scale}}</section>
+    </template>
+    <section v-if="!isWeapon" v-for="(flag, index) in weaponFlags" :key="`f${index}`" :class="{ goodFlag: flag.flagType === 'good', badFlag: flag.flagType === 'bad' }">{{flag.text}}</section>
+</div>

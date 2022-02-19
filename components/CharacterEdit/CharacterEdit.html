@@ -1,0 +1,8 @@
+<Character
+    :character="character"
+    :edit-mode="true"
+    @attribute:increment="changeAttributeValue($event, 1)"
+    @attribute:decrement="changeAttributeValue($event, -1)"
+    @skill:increment="changeSkillValue($event, 1)"
+    @skill:decrement="changeSkillValue($event, -1)"
+/>

@@ -1,0 +1,15 @@
+<div>
+    <div>
+        <p>Upload troops.txt</p>
+        <p v-show="troops">File selected</p>
+        <Upload v-model="troops" />
+    </div>
+    <div>
+        <p>Upload item_kinds1.txt</p>
+        <p v-show="items">File selected</p>
+        <Upload v-model="items" />
+    </div>
+    <div>
+        <button :disabled="!canCommit" @click="onCommit">Commit</button>
+    </div>
+</div>

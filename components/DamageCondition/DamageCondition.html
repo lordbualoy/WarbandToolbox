@@ -1,0 +1,22 @@
+<fieldset :disabled="disabled">
+    <legend>{{text}}</legend>
+    <div>
+        <div>Damage Type</div>
+        <label v-for="(option, index) in damageOptions" :key="index">
+            {{option}}
+            <Checkbox :modelValue="typeCondition.includes(option)" @update:modelValue="onChecked(option)" />
+        </label>
+    </div>
+    <div>
+        <div>Damage Amount</div>
+        <Dropdown v-model="conditionType" :options="conditions" />
+        <input v-if="isSingularValueCondition" type="number" v-model="singularValue">
+        <div v-else>
+            <Dropdown v-model="lowerBoundConditionType" :options="lowerBoundConditions" />
+            <input type="number" v-model="lowerBoundValue">
+            &&
+            <Dropdown v-model="upperBoundConditionType" :options="upperBoundConditions" />
+            <input type="number" v-model="upperBoundValue">
+        </div>
+    </div>
+</fieldset>

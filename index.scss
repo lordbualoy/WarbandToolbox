@@ -1,0 +1,291 @@
+@mixin item-tooltip {
+  position: absolute;
+  background-color: black;
+  color: white;
+  font-size: 1.25rem;
+  padding: 5px;
+  border-radius: 4px;
+
+  .type {
+    color: blueviolet;
+  }
+
+  .difficulty {
+    color: lime;
+  }
+
+  .value {
+    color: gold;
+  }
+
+  .damage {
+    color: crimson;
+  }
+
+  .accuracy {
+    color: fuchsia;
+  }
+
+  .goodFlag {
+    color: green;
+  }
+
+  .badFlag {
+    color: red;
+  }
+
+  .armor {
+    color: skyblue;
+  }
+}
+
+.upload {
+    display: inline-block;
+
+    > div {
+        border: 2px solid gray;
+        color: gray;
+        background-color: white;
+        padding: 0.25em 1em;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+}
+
+* {
+	font-family: Helvetica, sans-serif;
+}
+
+#character {
+  > header {
+    display: flex;
+    justify-content: space-between;
+
+    .title {
+      margin: 10px 0px;
+      font-size: 3rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .button {
+      margin: 10px 0px;
+      font-size: 3rem;
+      font-weight: bold;
+      text-align: center;
+
+      border: 2px solid gray;
+      color: gray;
+      background-color: white;
+      padding: 0.025em 0.5em;
+      border-radius: 8px;
+    }
+  }
+
+  > main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 20px;
+    
+    .general {
+      grid-column: 1;
+      grid-row: 1;
+      
+      dl {
+        grid-template-columns: 1fr 4fr;
+  
+        .facekey {
+          word-break: break-all;
+          font-size: 0.6em;
+        }
+      }
+    }
+    .attribute {
+      grid-column: 1;
+      grid-row: 2;
+      
+      .separator {
+        grid-column: 1 / 3;
+        grid-row: 4 / 6;
+        height: 0.5em;
+      }
+    }
+    .weaponProficiencies {
+      grid-column: 1;
+      grid-row: 3;
+    }
+    .skills {
+      grid-column: 2;
+      grid-row: 1 / 4;
+    }
+    .flags {
+      grid-column: 3;
+      grid-row: 1;
+    }
+    .inventory {
+      grid-column: 3;
+      grid-row: 2;
+
+      .chance {
+        color: grey;
+      }
+
+      .tooltip {
+        @include item-tooltip;
+      }
+    }
+    .upgradePath {
+      grid-column: 3;
+      grid-row: 3;
+    }
+    
+    > section {
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+  
+    dl {
+      margin: 10px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      
+      > dt, dd {
+        padding: 0.2em;
+      }
+    }
+
+    div.tabular {
+      margin: 10px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      
+      > div {
+        padding: 0.2em;
+      }
+    }
+
+    header {
+      margin: 10px 0px;
+      font-size: 2rem;
+      text-align: center;
+    }
+  }
+  
+  .unspent-points {
+    margin: 10px 0px;
+    text-align: center;
+  }
+}
+
+#item-index, #character-index {
+  > header {
+    display: flex;
+    flex-direction: column;
+
+    .sort {
+      display: flex;
+    }
+
+    .filter {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      height: 25vh;
+
+      .filter-container {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+
+      &.modifiers {
+        height: 60vh;
+        width: 40vw;
+      }
+      &.flags {
+        height: 60vh;
+        width: 40vw;
+      }
+      &.capabilities {
+        height: 60vh;
+        width: 60vw;
+      }
+    }
+
+    .tooltip {
+      @include item-tooltip;
+    }
+  }
+
+  > section {
+    overflow-y: auto;
+    height: 45vh;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      thead {
+        tr {
+          background-color: #f0f0f0;
+
+          th {
+            border-bottom: 1px solid silver;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          &:nth-child(even){
+            background-color: #f0f0f0;
+          }
+          &:hover {
+            background-color: gainsboro;
+          }
+
+          td {
+            border-bottom: 1px solid silver;
+          }
+        }
+      }
+    }
+  }
+}
+
+.modal{
+  position: absolute;
+  z-index:1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 3px 10px 5px rgba(0,0,0,0.2);
+  padding: 0.5em;
+  
+  > header {
+    font-size: 2em;
+    font-weight: bold;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-bottom: solid 1px black;
+    text-align: center;
+  }
+  
+  > section {
+    margin-top: 1em;
+  }
+  
+  > footer {
+    margin-top: 1em;
+    border-top: solid 1px black;
+    padding-top: 0.4em;
+    text-align: right;
+  }
+}

@@ -1,0 +1,214 @@
+<div id="player-edit">
+    <div v-if="!editMode">
+        <label>
+            Use native background
+            <Checkbox v-model="useNativeBackground" />
+        </label>
+        <br />
+        <button @click="goToEditMode">Ok</button>
+        <div v-if="useNativeBackground">
+            <h2>
+                Background
+            </h2>
+            <dl>
+                <dt>Sex</dt>
+                <dd>
+                    <Dropdown v-model="sex" :options="sexOptions" />
+                </dd>
+                <dt>Father</dt>
+                <dd>
+                    <Dropdown v-model="father" :options="fatherOptions" />
+                </dd>
+                <dt>Childhood</dt>
+                <dd>
+                    <Dropdown v-model="childhood" :options="childhoodOptions" />
+                </dd>
+                <dt>Adulthood</dt>
+                <dd>
+                    <Dropdown v-model="adulthood" :options="adulthoodOptions" />
+                </dd>
+                <dt>Reason for adventuring</dt>
+                <dd>
+                    <Dropdown v-model="adventuringReason" :options="adventuringReasonOptions" />
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <h2 v-show="useNativeBackground">
+                Preview
+            </h2>
+            <div>
+                <h3>
+                    Attributes
+                </h3>
+                <dl>
+                    <dt>Initial Attribute Points</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{initialAttributePoints}}</span>
+                        <input v-else type="number" v-model="initialAttributePoints">
+                    </dd>
+                    <dt>Strength</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{strength}}</span>
+                        <input v-else type="number" v-model="strength">
+                    </dd>
+                    <dt>Agility</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{agility}}</span>
+                        <input v-else type="number" v-model="agility">
+                    </dd>
+                    <dt>Intelligence</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{intelligence}}</span>
+                        <input v-else type="number" v-model="intelligence">
+                    </dd>
+                    <dt>Charisma</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{charisma}}</span>
+                        <input v-else type="number" v-model="charisma">
+                    </dd>
+                </dl>
+            </div>
+            <div>
+                <h3>
+                    Skills
+                </h3>
+                <dl>
+                    <dt>Initial Skill Points</dt>
+                    <dd>
+                        <span>{{initialSkillPoints}}</span>
+                    </dd>
+                    <dt>Ironflesh</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{ironflesh}}</span>
+                        <input v-else type="number" v-model="ironflesh">
+                    </dd>
+                    <dt>Power Strike</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{powerStrike}}</span>
+                        <input v-else type="number" v-model="powerStrike">
+                    </dd>
+                    <dt>Power Throw</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{powerThrow}}</span>
+                        <input v-else type="number" v-model="powerThrow">
+                    </dd>
+                    <dt>Power Draw</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{powerDraw}}</span>
+                        <input v-else type="number" v-model="powerDraw">
+                    </dd>
+                    <dt>Weapon Master</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{weaponMaster}}</span>
+                        <input v-else type="number" v-model="weaponMaster">
+                    </dd>
+                    <dt>Shield</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{shield}}</span>
+                        <input v-else type="number" v-model="shield">
+                    </dd>
+                    <dt>Athletics</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{athletics}}</span>
+                        <input v-else type="number" v-model="athletics">
+                    </dd>
+                    <dt>Riding</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{riding}}</span>
+                        <input v-else type="number" v-model="riding">
+                    </dd>
+                    <dt>Horse Archery</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{horseArchery}}</span>
+                        <input v-else type="number" v-model="horseArchery">
+                    </dd>
+                    <dt>Looting</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{looting}}</span>
+                        <input v-else type="number" v-model="looting">
+                    </dd>
+                    <dt>Trainer</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{trainer}}</span>
+                        <input v-else type="number" v-model="trainer">
+                    </dd>
+                    <dt>Tracking</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{tracking}}</span>
+                        <input v-else type="number" v-model="tracking">
+                    </dd>
+                    <dt>Tactics</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{tactics}}</span>
+                        <input v-else type="number" v-model="tactics">
+                    </dd>
+                    <dt>Path-finding</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{pathfinding}}</span>
+                        <input v-else type="number" v-model="pathfinding">
+                    </dd>
+                    <dt>Spotting</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{spotting}}</span>
+                        <input v-else type="number" v-model="spotting">
+                    </dd>
+                    <dt>Inventory Management</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{inventoryManagement}}</span>
+                        <input v-else type="number" v-model="inventoryManagement">
+                    </dd>
+                    <dt>Wound Treatment</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{woundTreatment}}</span>
+                        <input v-else type="number" v-model="woundTreatment">
+                    </dd>
+                    <dt>Surgery</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{surgery}}</span>
+                        <input v-else type="number" v-model="surgery">
+                    </dd>
+                    <dt>First Aid</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{firstAid}}</span>
+                        <input v-else type="number" v-model="firstAid">
+                    </dd>
+                    <dt>Engineer</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{engineer}}</span>
+                        <input v-else type="number" v-model="engineer">
+                    </dd>
+                    <dt>Persuasion</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{persuasion}}</span>
+                        <input v-else type="number" v-model="persuasion">
+                    </dd>
+                    <dt>Prisoner Management</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{prisonerManagement}}</span>
+                        <input v-else type="number" v-model="prisonerManagement">
+                    </dd>
+                    <dt>Leadership</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{leadership}}</span>
+                        <input v-else type="number" v-model="leadership">
+                    </dd>
+                    <dt>Trade</dt>
+                    <dd>
+                        <span v-if="useNativeBackground">{{trade}}</span>
+                        <input v-else type="number" v-model="trade">
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <Character
+        v-else
+        :character="character"
+        :edit-mode="true"
+        @attribute:increment="changeAttributeValue($event, 1)"
+        @attribute:decrement="changeAttributeValue($event, -1)"
+        @skill:increment="changeSkillValue($event, 1)"
+        @skill:decrement="changeSkillValue($event, -1)"
+    />
+</div>

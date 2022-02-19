@@ -1,0 +1,13 @@
+<div class="modal" v-show="modelValue">
+    <header>
+        <slot name="header" />
+    </header>
+    <section>
+        <slot name="body" />
+    </section>
+    <footer>
+        <slot name="footer">
+            <button @click="$emit('update:modelValue', false)">Close</button>
+        </slot>
+    </footer>
+</div>

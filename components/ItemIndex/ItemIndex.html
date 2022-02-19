@@ -1,0 +1,279 @@
+<div id="item-index">
+    <header>
+        <ItemTooltip ref="tooltipRef" v-show="tooltip.hovering" :style="{ left: tooltip.x, top: tooltip.y }" :id="tooltip.id" />
+        <Dropdown v-model="itemType" :options="itemTypeOptions" />
+        <div class="sort">
+            <Dropdown v-model="sortColumn" :options="sortColumns" />
+            <Dropdown v-model="sortDirection" :options="sortDirectionOptions" />
+        </div>
+        <div class="filter">
+            <FilterContainer v-model="filters.name.active">
+                <TextCondition text="Name" v-model="filters.name.value" :disabled="!filters.name.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.value.active">
+                <NumericCondition text="Value" :value="filters.value.value" :disabled="!filters.value.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.weight.active">
+                <NumericCondition text="Weight" :value="filters.weight.value" :disabled="!filters.weight.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.abundance.active">
+                <NumericCondition text="Abundance" :value="filters.abundance.value" :disabled="!filters.abundance.active" />
+            </FilterContainer>
+            <FilterContainer v-model="filters.modifiers.active">
+                <fieldset :disabled="!filters.modifiers.active">
+                    <legend>Modifiers</legend>
+                    <button @click="modifierFilterModalState = true">Setting</button>
+                </fieldset>
+                <Modal v-model="modifierFilterModalState">
+                    <template #header>Modifiers</template>
+                    <template #body>
+                        <div class="modal-body modifiers">
+                            <CheckboxArray v-model="filters.modifiers.value" :options="modifierOptions" :threeState="true" />
+                        </div>
+                    </template>
+                </Modal>
+            </FilterContainer>
+            <FilterContainer v-model="filters.flags.active">
+                <fieldset :disabled="!filters.flags.active">
+                    <legend>Flags</legend>
+                    <button @click="flagFilterModalState = true">Setting</button>
+                </fieldset>
+                <Modal v-model="flagFilterModalState">
+                    <template #header>Flags</template>
+                    <template #body>
+                        <div class="modal-body flags">
+                            <CheckboxArray v-model="filters.flags.value" :options="flagOptions" :threeState="true" />
+                        </div>
+                    </template>
+                </Modal>
+            </FilterContainer>
+            <FilterContainer v-model="filters.capabilities.active">
+                <fieldset :disabled="!filters.capabilities.active">
+                    <legend>Capabilities</legend>
+                    <button @click="capabilityFilterModalState = true">Setting</button>
+                </fieldset>
+                <Modal v-model="capabilityFilterModalState">
+                    <template #header>Capabilities</template>
+                    <template #body>
+                        <div class="modal-body capabilities">
+                            <CheckboxArray v-model="filters.capabilities.value" :options="capabilityOptions" :threeState="true" />
+                        </div>
+                    </template>
+                </Modal>
+            </FilterContainer>
+            <template v-if="itemClass === 'melee'">
+                <FilterContainer v-model="filters.difficulty.active">
+                    <NumericCondition text="Difficulty" :value="filters.difficulty.value" :disabled="!filters.difficulty.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.speedRating.active">
+                    <NumericCondition text="Speed" :value="filters.speedRating.value" :disabled="!filters.speedRating.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.weaponLength.active">
+                    <NumericCondition text="Reach" :value="filters.weaponLength.value" :disabled="!filters.weaponLength.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.damageSwing.active">
+                    <DamageCondition text="Swing Damage" :value="filters.damageSwing.value" :disabled="!filters.damageSwing.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.damageThrust.active">
+                    <DamageCondition text="Thrust Damage" :value="filters.damageThrust.value" :disabled="!filters.damageThrust.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.alternateMode.active">
+                    <BooleanCondition text="Alternate Mode" v-model="filters.alternateMode.value" :disabled="!filters.alternateMode.active" :three-state="true" />
+                </FilterContainer>
+            </template>
+            <template v-if="itemClass === 'ranged'">
+                <FilterContainer v-model="filters.difficulty.active">
+                    <NumericCondition text="Difficulty" :value="filters.difficulty.value" :disabled="!filters.difficulty.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.speedRating.active">
+                    <NumericCondition text="Speed" :value="filters.speedRating.value" :disabled="!filters.speedRating.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.missileSpeed.active">
+                    <NumericCondition text="Missile Speed" :value="filters.missileSpeed.value" :disabled="!filters.missileSpeed.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.accuracy.active">
+                    <NumericCondition text="Accuracy" :value="filters.accuracy.value" :disabled="!filters.accuracy.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.damageRanged.active">
+                    <DamageCondition text="Damage" :value="filters.damageRanged.value" :disabled="!filters.damageRanged.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.maxAmmo.active">
+                    <NumericCondition text="Ammo Count" :value="filters.maxAmmo.value" :disabled="!filters.maxAmmo.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.alternateMode.active">
+                    <BooleanCondition text="Alternate Mode" v-model="filters.alternateMode.value" :disabled="!filters.alternateMode.active" />
+                </FilterContainer>
+            </template>
+            <template v-if="itemClass === 'ammo'">
+                <FilterContainer v-model="filters.damageRanged.active">
+                    <DamageCondition text="Damage" :value="filters.damageRanged.value" :disabled="!filters.damageRanged.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.maxAmmo.active">
+                    <NumericCondition text="Ammo Count" :value="filters.maxAmmo.value" :disabled="!filters.maxAmmo.active" />
+                </FilterContainer>
+            </template>
+            <template v-if="itemClass === 'shield'">
+                <FilterContainer v-model="filters.hitPoints.active">
+                    <NumericCondition text="Hit Points" :value="filters.hitPoints.value" :disabled="!filters.hitPoints.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.shieldArmor.active">
+                    <NumericCondition text="Resistance" :value="filters.shieldArmor.value" :disabled="!filters.shieldArmor.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.shieldWidth.active">
+                    <NumericCondition text="Width" :value="filters.shieldWidth.value" :disabled="!filters.shieldWidth.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.shieldHeight.active">
+                    <NumericCondition text="Height" :value="filters.shieldHeight.value" :disabled="!filters.shieldHeight.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.speedRating.active">
+                    <NumericCondition text="Speed" :value="filters.speedRating.value" :disabled="!filters.speedRating.active" />
+                </FilterContainer>
+            </template>
+            <template v-if="itemClass === 'armor'">
+                <FilterContainer v-model="filters.difficulty.active">
+                    <NumericCondition text="Difficulty" :value="filters.difficulty.value" :disabled="!filters.difficulty.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.headArmor.active">
+                    <NumericCondition text="Head Armor" :value="filters.headArmor.value" :disabled="!filters.headArmor.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.bodyArmor.active">
+                    <NumericCondition text="Body Armor" :value="filters.bodyArmor.value" :disabled="!filters.bodyArmor.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.legArmor.active">
+                    <NumericCondition text="Leg Armor" :value="filters.legArmor.value" :disabled="!filters.legArmor.active" />
+                </FilterContainer>
+            </template>
+            <template v-if="itemClass === 'mount'">
+                <FilterContainer v-model="filters.difficulty.active">
+                    <NumericCondition text="Difficulty" :value="filters.difficulty.value" :disabled="!filters.difficulty.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.mountArmor.active">
+                    <NumericCondition text="Armor" :value="filters.mountArmor.value" :disabled="!filters.mountArmor.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.speedRating.active">
+                    <NumericCondition text="Speed" :value="filters.speedRating.value" :disabled="!filters.speedRating.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.maneuver.active">
+                    <NumericCondition text="Maneuver" :value="filters.maneuver.value" :disabled="!filters.maneuver.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.damageCharge.active">
+                    <NumericCondition text="Charge" :value="filters.damageCharge.value" :disabled="!filters.damageCharge.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.hitPoints.active">
+                    <NumericCondition text="Hit Points" :value="filters.hitPoints.value" :disabled="!filters.hitPoints.active" />
+                </FilterContainer>
+                <FilterContainer v-model="filters.mountScale.active">
+                    <NumericCondition text="Scale" :value="filters.mountScale.value" :disabled="!filters.mountScale.active" />
+                </FilterContainer>
+            </template>
+        </div>
+    </header>
+    <section>
+        <Table :columns="columns" :rows="rows">
+            <template #cell(rowNo)="{ index }">
+                {{ index + 1 }}
+            </template>
+            <template #cell(i)="{ data }">
+                {{ data.i }}
+            </template>
+            <template #cell(id)="{ data, index }">
+                <span class="item-id" @mouseover="onTooltipShow(index)" @mouseleave="onTooltipHide(index)">
+                    {{data.id}}
+                </span>
+            </template>
+            <template #cell(name)="{ data }">
+                {{ data.name === data.pluralizedName ? data.name : `${data.name} (${data.pluralizedName})` }}
+            </template>
+            <template #cell(value)="{ data }">
+                {{ data.value }}
+            </template>
+            <template #cell(weight)="{ data }">
+                {{ data.weight.toFixed(1) }}
+            </template>
+            <template #cell(abundance)="{ data }">
+                {{ data.abundance }}
+            </template>
+            <template #cell(modifiers)="{ data }">
+                <ul>
+                    <li v-if="data.modifiers.length > 0" v-for="(modifier, index) in data.modifiers" :key="index">{{modifier}}</li>
+                    <li v-else>none</li>
+                </ul>
+            </template>
+            <template #cell(factions)="{ data }">
+                <ul>
+                    <li v-if="data.factionIDs.length > 0" v-for="(faction, index) in data.factionIDs" :key="index">{{faction}}</li>
+                    <li v-else>any</li>
+                </ul>
+            </template>
+            <template #cell(flags)="{ data }">
+                <ul>
+                    <li v-if="data.flags.length > 0" v-for="(flag, index) in data.flags" :key="index">{{flag}}</li>
+                    <li v-else>none</li>
+                </ul>
+            </template>
+            <template #cell(difficulty)="{ data }">
+                {{data.difficulty}}
+            </template>
+            <template #cell(speed)="{ data }">
+                {{data.speedRating}}
+            </template>
+            <template #cell(reach)="{ data }">
+                {{data.weaponLength}}
+            </template>
+            <template #cell(damageSwing)="{ data }">
+                {{data.damageSwing}}
+            </template>
+            <template #cell(damageThrust)="{ data }">
+                {{data.damageThrust}}
+            </template>
+            <template #cell(hasAlternateMode)="{ data }">
+                {{!!data.alternateMode}}
+            </template>
+            <template #cell(missileSpeed)="{ data }">
+                {{data.missileSpeed}}
+            </template>
+            <template #cell(accuracy)="{ data }">
+                {{data.accuracy}}
+            </template>
+            <template #cell(damageRanged)="{ data }">
+                {{data.damageRanged}}
+            </template>
+            <template #cell(ammo)="{ data }">
+                {{data.maxAmmo}}
+            </template>
+            <template #cell(hitPoints)="{ data }">
+                {{data.hitPoints}}
+            </template>
+            <template #cell(shieldArmor)="{ data }">
+                {{data.shieldArmor}}
+            </template>
+            <template #cell(shieldWidth)="{ data }">
+                {{data.shieldWidth}}
+            </template>
+            <template #cell(shieldHeight)="{ data }">
+                {{data.shieldHeight}}
+            </template>
+            <template #cell(headArmor)="{ data }">
+                {{data.headArmor}}
+            </template>
+            <template #cell(bodyArmor)="{ data }">
+                {{data.bodyArmor}}
+            </template>
+            <template #cell(legArmor)="{ data }">
+                {{data.legArmor}}
+            </template>
+            <template #cell(mountArmor)="{ data }">
+                {{data.mountArmor}}
+            </template>
+            <template #cell(maneuver)="{ data }">
+                {{data.maneuver}}
+            </template>
+            <template #cell(damageCharge)="{ data }">
+                {{data.damageCharge}}
+            </template>
+            <template #cell(mountScale)="{ data }">
+                {{data.mountScale}}
+            </template>
+        </Table>
+    </section>
+</div>

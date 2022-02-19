@@ -1,0 +1,66 @@
+<div id="trainer-simulator">
+    <section>
+        <h3>Trainers</h3>
+        <Table :columns="columnsTrainer" :rows="trainers">
+            <template #cell(characterLevel)="{ data }">
+                <input type="number" v-model="data.characterLevel">
+            </template>
+            <template #cell(trainerLevel)="{ data }">
+                <input type="number" v-model="data.trainerLevel">
+            </template>
+            <template #cell(expAmount)="{ data }">
+                {{ data.expAmount }}
+            </template>
+            <template #cell(tools)="{ index }">
+                <button @click="deleteTrainer(index)">Delete</button>
+            </template>
+        </Table>
+        <button @click="addTrainer">Add</button>
+        <br />
+        Total Exp to be given: {{totalTrainedExp}}
+        <br />
+        <button @click="trainTroops">Train</button>
+        <br />
+        Trained for {{trainedCounter}} times
+    </section>
+    <section>
+        <h3>Troops</h3>
+        <Table :columns="columnsTroop" :rows="troops">
+            <template #cell(select)="{ data }">
+                <Dropdown v-model="data.id" :options="troopOptions" />
+            </template>
+            <template #cell(id)="{ data }">
+                {{ data.id }}
+            </template>
+            <template #cell(name)="{ data }">
+                {{ data.name }}
+            </template>
+            <template #cell(level)="{ data }">
+                {{ data.level }}
+            </template>
+            <template #cell(expRequired)="{ data }">
+                {{ data.expRequired }}
+            </template>
+            <template #cell(count)="{ data }">
+                <input type="number" v-model="data.count">
+            </template>
+            <template #cell(incomingExp)="{ data }">
+                {{ data.incomingExp }}
+            </template>
+            <template #cell(promotableCount)="{ data }">
+                {{ data.promotableCount }}
+            </template>
+            <template #cell(stackAccumulatedExp)="{ data }">
+                {{ data.stackAccumulatedExp }}
+            </template>
+            <template #cell(stackMaxExp)="{ data }">
+                {{ data.stackMaxExp }}
+            </template>
+            <template #cell(tools)="{ data, index }">
+                <button v-for="(upgrade, index2) in data.upgrades" :key="index2" :disabled="data.promotableCount === 0" @click="promoteTroop(data.upgrades[index2].id, index)">Promote 1 to {{upgrade.name}}</button>
+                <button @click="deleteTroop(index)">Delete</button>
+            </template>
+        </Table>
+        <button @click="addTroop">Add</button>
+    </section>
+</div>

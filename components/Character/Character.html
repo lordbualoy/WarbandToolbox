@@ -1,0 +1,129 @@
+<div id="character">
+    <header>
+        <div class="button" @click="$emit('navigate:prev')">
+            &lt;
+        </div>
+        <div class="title">
+            {{name}}
+        </div>
+        <div class="button" @click="$emit('navigate:next')">
+            &gt;
+        </div>
+    </header>
+    <main>
+        <section class="general">
+            <header>General</header>
+            <dl>
+                <dt>ID</dt>
+                <dd>{{id}}</dd>
+                <dt>Name</dt>
+                <dd>
+                    <div>
+                        {{name}}
+                    </div>
+                    <div v-show="pluralizedName">
+                        ({{pluralizedName}})
+                    </div>
+                </dd>
+                <dt>Type</dt>
+                <dd>{{type}}</dd>
+                <dt>Sex</dt>
+                <dd>{{sex}}</dd>
+                <dt>Faction</dt>
+                <dd>{{faction}}</dd>
+                <dt>Facekey</dt>
+                <dd>
+                    <div class="facekey">
+                        {{facekey1}}
+                    </div>
+                    <div class="facekey">
+                        {{facekey2}}
+                    </div>
+                </dd>
+            </dl>
+        </section>
+        <section class="flags">
+            <header>Flags</header>
+            <ul>
+                <li v-for="(flag, index) in otherFlags" :key="index">{{flag}}</li>
+            </ul>
+        </section>
+        <section class="attribute">
+            <header>Attributes</header>
+            <div class="tabular">
+                <div>Level</div>
+                <div>{{level}}</div>
+                <div>Exp required for Levelup</div>
+                <div>{{expRequired}}</div>
+                <div>Hit Points</div>
+                <div>{{hp}}</div>
+                <div class="separator"></div>
+                <div>Strength</div>
+                <div>
+                    <img v-show="editMode" width="15" src="images/minus.svg" @click="$emit('attribute:decrement', 'strength')">
+                    {{strength}}
+                    <img v-show="editMode" width="15" src="images/plus.svg" @click="$emit('attribute:increment', 'strength')">
+                </div>
+                <div>Agility</div>
+                <div>
+                    <img v-show="editMode" width="15" src="images/minus.svg" @click="$emit('attribute:decrement', 'agility')">
+                    {{agility}}
+                    <img v-show="editMode" width="15" src="images/plus.svg" @click="$emit('attribute:increment', 'agility')">
+                </div>
+                <div>Intelligence</div>
+                <div>
+                    <img v-show="editMode" width="15" src="images/minus.svg" @click="$emit('attribute:decrement', 'intelligence')">
+                    {{intelligence}}
+                    <img v-show="editMode" width="15" src="images/plus.svg" @click="$emit('attribute:increment', 'intelligence')">
+                </div>
+                <div>Charisma</div>
+                <div>
+                    <img v-show="editMode" width="15" src="images/minus.svg" @click="$emit('attribute:decrement', 'charisma')">
+                    {{charisma}}
+                    <img v-show="editMode" width="15" src="images/plus.svg" @click="$emit('attribute:increment', 'charisma')">
+                </div>
+            </div>
+            <div v-show="editMode" class="unspent-points">{{remainingAttributePoints}} Remaining Points</div>
+        </section>
+        <section class="skills">
+            <header>Skills</header>
+            <dl>
+                <template v-for="(skill, index) in skills" :key="index">
+                    <dt>{{skill.name}}</dt>
+                    <dd>
+                        <img v-show="editMode" width="15" src="images/minus.svg" @click="$emit('skill:decrement', skill.name)">
+                        {{skill.rank}}
+                        <img v-show="editMode" width="15" src="images/plus.svg" @click="$emit('skill:increment', skill.name)">
+                    </dd>
+                </template>
+            </dl>
+            <div v-show="editMode" class="unspent-points">{{remainingSkillPoints}} Remaining Points</div>
+        </section>
+        <section class="weaponProficiencies">
+            <header>Weapon Proficiencies</header>
+            <dl>
+                <template v-for="(weaponProficiency, index) in weaponProficiencies" :key="index">
+                    <dt>{{weaponProficiency.name}}</dt>
+                    <dd>{{weaponProficiency.value}}</dd>
+                </template>
+            </dl>
+        </section>
+        <section class="inventory">
+            <header>Inventory</header>
+            <div>
+                <ItemTooltip ref="itemTooltipRef" v-show="itemTooltip.hovering" :style="{ left: itemTooltip.x, top: itemTooltip.y }" :id="itemTooltip.id" />
+                <div v-for="(item, index) in inventory" :key="index" class="item" :class="{ chance: !item.isGuaranteed }" @mouseover="onTooltipShow(index)" @mouseleave="onTooltipHide(index)">
+                    <img :src="item.image" width="20"> {{item.name}}
+                </div>
+            </div>
+        </section>
+        <section class="upgradePath">
+            <header>Upgrades To</header>
+            <ol>
+                <li v-for="(upgrade, index) in upgrades" :key="index">
+                    <router-link :to="{ name: 'Character', params: { troopID: upgrade.id } }">{{upgrade.name}}</router-link>
+                </li>
+            </ol>
+        </section>
+    </main>
+</div>

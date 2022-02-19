@@ -1,0 +1,6 @@
+<div v-for="(option, index) in options" :key="index">
+    <label>
+        {{option}}
+        <Checkbox :modelValue="isChecked(option)" @update:modelValue="onChecked(option, $event)" :threeState="threeState" />
+    </label>
+</div>
